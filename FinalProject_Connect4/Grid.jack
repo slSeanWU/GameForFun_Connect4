@@ -1,0 +1,38 @@
+class Grid{
+	field int leftBound, upperBound;
+	field int blockSize;
+	
+	constructor Grid new(){
+		let leftBound = 130;
+		let upperBound = 50;
+		let blockSize = 26;
+		
+		return this;
+	}
+	
+	method void drawGrid(){
+		var int cnt, x, y;
+		let cnt = 0;
+		
+		do Screen.drawLine(128, 50, 128, 208);
+		do Screen.drawLine(129, 50, 129, 208);
+		while( cnt < 8 ){
+			let x = leftBound + (cnt*blockSize);
+			do Screen.drawLine(x, 50, x, 206) ;
+			let cnt = cnt + 1;
+		}
+		do Screen.drawLine(313, 50, 313, 208);
+		do Screen.drawLine(314, 50, 314, 208);
+		
+		let cnt = 0;
+		while( cnt < 7 ){
+			let y = upperBound + (cnt*blockSize);
+			do Screen.drawLine(130, y, 312, y);
+			let cnt = cnt + 1;
+		}
+		do Screen.drawLine(128, 207, 314, 207);
+		do Screen.drawLine(128, 208, 314, 208);
+		
+		return;
+	}
+}

@@ -1,0 +1,13 @@
+class ConnectGame{
+	field Grid grid;
+	field int current_p, current_col, steps;
+	
+	constructor ConnectGame new(){
+		let grid = Grid.new();
+		let current_p = 0;
+		let current_col = 3;
+		let steps = 0;
+		
+		return this;
+	}
+}
