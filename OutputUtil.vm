@@ -1,0 +1,9 @@
+function OutputUtil.printStringConst 0
+push argument 0
+call Output.printString 1
+pop temp 0
+push argument 0
+call String.dispose 1
+pop temp 0
+push constant 0
+return

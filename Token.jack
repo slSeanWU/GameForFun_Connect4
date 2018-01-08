@@ -1,0 +1,64 @@
+/* 	This is part of a Connect 4 game made for educational purposes
+	as Project 09 of the Nand2Tetris course.
+	
+	Written by Slayorious */
+	
+/** 
+	Implements the token used during gameplay and player setup.
+*/
+
+class Token
+{
+	field int color;
+	
+	constructor Token new(int c)
+	{
+		let color = c;
+		
+		return this;
+	}
+	
+	// Draws the token to the screen centered at (x,y).
+	method void drawToken(int x, int y)
+	{
+		// Draws a white token.
+		if (color = 0)
+		{
+			do Screen.drawCircle(x,y,6);
+			do Screen.setColor(false);
+			do Screen.drawCircle(x,y,5);
+			do Screen.setColor(true);
+			do Screen.drawCircle(x,y,4);
+			do Screen.setColor(false);
+			do Screen.drawCircle(x,y,3);
+			do Screen.setColor(true);
+		}
+		// Draws a black token.
+		else
+		{
+			do Screen.drawCircle(x,y,6);
+			do Screen.setColor(false);
+			do Screen.drawCircle(x,y,5);
+			do Screen.setColor(true);
+			do Screen.drawCircle(x,y,4);
+		}
+		return;
+	}
+	
+	method void setColor(int c)
+	{
+		let color = c;
+		return;
+	}
+	
+	method int getColor()
+	{
+		return color;
+	}
+	
+	method void dispose()
+	{
+		do Memory.deAlloc(this);
+		return;
+	}
+}
