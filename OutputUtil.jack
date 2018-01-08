@@ -1,0 +1,18 @@
+/* 	This is part of a Connect 4 game made for educational purposes
+	as Project 09 of the Nand2Tetris course.
+	
+	Written by Slayorious */
+	
+/**
+	Provides output methods that clean up strings allocated in memory.
+*/
+
+class OutputUtil
+{
+	function void printStringConst(String str)
+	{
+		do Output.printString(str);
+		do str.dispose();
+		return;
+	}
+}

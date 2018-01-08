@@ -1,0 +1,50 @@
+/* 	This is part of a Connect 4 game made for educational purposes
+	as Project 09 of the Nand2Tetris course.
+	
+	Written by Slayorious */
+	
+/** 
+	Implements a coordinate class.
+*/
+
+class Coordinate
+{
+	field int x;
+	field int y;
+	
+	constructor Coordinate new()
+	{
+		let x = 0;
+		let y = 0;
+		
+		return this;
+	}
+	
+	method void setX(int a)
+	{
+		let x = a;
+		return;
+	}
+	
+	method void setY(int b)
+	{
+		let y = b;
+		return;
+	}
+	
+	method int getX()
+	{
+		return x;
+	}
+	
+	method int getY()
+	{
+		return y;
+	}
+	
+	method void dispose()
+	{
+		do Memory.deAlloc(this);
+		return;
+	}
+}

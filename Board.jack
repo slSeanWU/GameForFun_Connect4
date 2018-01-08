@@ -1,0 +1,352 @@
+/* 	This is part of a Connect 4 game made for educational purposes
+	as Project 09 of the Nand2Tetris course.
+	
+	Written by Slayorious */
+	
+/** 
+	Implements the board that will be used in the connect four.
+*/
+
+class Board
+{
+	field Token token;
+	field Matrix tokenGrid;
+	//field Coordinate lastTokenCoord;
+	field int s, r, eo, yo;		// These variables are options for drawing the board.
+	
+	constructor Board new()
+	{
+		let token = Token.new(0);
+		let tokenGrid = Matrix.new(7,6);
+		//let lastTokenCoord = Coordinate.new();
+		
+		let s = 22;							// size of space around circles.
+		let r = 9;							// radius.
+		let eo = (s - ( 2 * r)) / 2;		// edge offset for the square.
+		let yo = 6;							// y offset.
+		
+		return this;
+	}
+	
+	method void drawBoard()
+	{
+		var int i, j, x, y, a, b, c, d;
+		
+		let x = 256 - (s * 3) - (s / 2);
+		let y = 128 - (s * 3) + yo;
+		let a = x - eo;
+		let b = y - eo;
+		let c = 512 - x + eo;
+		let d = 256 - y + eo + (2 * yo);
+		
+		do Screen.drawLine(a, b, c, b);
+		do Screen.drawLine(a, b, a, d);
+		do Screen.drawLine(a, d, c, d);
+		do Screen.drawLine(c, b, c, d);
+		
+		let i = 0;
+		let x = 256 - (s * 3);
+		while (i < 7)
+		{
+			let j = 0;
+			let y = 128 - (s * 3) + (s / 2) + yo;
+			
+			while (j < 6)
+			{
+				do Screen.drawCircle(x, y, r);
+				do Screen.setColor(false);
+				do Screen.drawCircle(x, y, (r - 1));
+				do Screen.setColor(true);
+				
+				let y = y + s;
+				let j = j + 1;
+			}
+			
+			let x = x + s;
+			let i = i + 1;
+		}
+		
+		return;
+	}
+	
+	// Drops the token into the board and updates the grid.
+	method void dropToken(int column, int color)
+	{
+		var int row;
+		
+		let row = 0;
+		
+		while (isEmpty(column, row))
+		{
+			do eraseToken(column, row);
+			let row = row + 1;
+			do drawToken(column, row, color);
+			do Sys.wait(200);
+		}
+		
+		do tokenGrid.set(column, row - 1, color + 1);
+		//do lastTokenCoord.setX(column);
+		//do lastTokenCoord.setY(row - 1);
+		
+		return;
+	}
+	
+	// Draws a token at a desired column and row. If row is zero draws token above board.
+	method void drawToken(int column, int row, int color)
+	{
+		var int x, y;
+		
+		let x = 256 - (s * 3) + (s * column);
+		
+		// Set the y value differently depending on whether drawing the token on the top row or the board.
+		if (row = 0)
+		{
+			let y = 128 - (s * 4) + (s / 2) + yo - eo;
+		}
+		else
+		{
+			let y = 128 - (s * 4) + (s / 2) + yo + (s * row);
+		}
+		
+		do token.setColor(color);
+		do token.drawToken(x, y);
+		
+		return;
+	}
+	// Erases a token at a desired column. If row is zero draws token above board.
+	method void eraseToken(int column, int row)
+	{
+		var int x, y;
+		
+		let x = 256 - (s * 3) + (s * column);
+		
+		// Set the y value differently depending on whether drawing the token on the top row or the board.
+		if (row = 0)
+		{
+			let y = 128 - (s * 4) + (s / 2) + yo - eo;
+		}
+		else
+		{
+			let y = 128 - (s * 4) + (s / 2) + yo + (s * row);
+		}
+		
+		do Screen.setColor(false);
+		do Screen.drawCircle(x, y, r - 1);
+		do Screen.setColor(true);
+		
+		return;
+	}
+	
+	// Checks to see if the column the player is dropping the token has space for the token.
+	method bool isEmpty(int column, int row)
+	{
+		if (row = 6)
+		{
+			return false;
+		}
+		if (tokenGrid.get(column, row) = 0)
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+	
+	// Checks to see if the player has won the game.
+	method bool isWinner()
+	{
+		var int x, y;
+		var bool isWinner;
+		
+		let x = 0;
+		//let x = lastTokenCoord.getX();
+		//let y = lastTokenCoord.getY();
+		
+		while (x < 7)
+		{
+			let y = 0;
+			
+			while (y < 6)
+			{
+				if (~(tokenGrid.get(x, y) = 0))
+				{
+					if (y < 3)
+					{
+						if (x = 3)
+						{
+							if (checkLeftHorizontal(x, y))
+							{
+								return true;
+							}
+							if (checkRightHorizontal(x, y))
+							{
+								return true;
+							}
+							if (checkDownLeftDiagonal(x, y))
+							{
+								return true;
+							}
+							if (checkDownRightDiagonal(x, y))
+							{
+								return true;
+							}
+							if (checkDownVertical(x, y))
+							{
+								return true;
+							}
+						}
+						if (x < 3)
+						{
+							if (checkRightHorizontal(x, y))
+							{
+								return true;
+							}
+							if (checkDownRightDiagonal(x, y))
+							{
+								return true;
+							}
+							if (checkDownVertical(x, y))
+							{
+								return true;
+							}
+						}
+						if (x > 3)
+						{
+							if (checkLeftHorizontal(x, y))
+							{
+								return true;
+							}
+							if (checkDownLeftDiagonal(x, y))
+							{
+								return true;
+							}
+							if (checkDownVertical(x, y))
+							{
+								return true;
+							}
+						}
+					}
+					if (y > 2)
+					{
+						if (x = 3)
+						{
+							if (checkRightHorizontal(x, y))
+							{
+								return true;
+							}
+							if (checkLeftHorizontal(x, y))
+							{
+								return true;
+							}
+						}
+						if (x < 3)
+						{
+							if (checkRightHorizontal(x, y))
+							{
+								return true;
+							}
+						}
+						if (x > 3)
+						{
+							if (checkLeftHorizontal(x, y))
+							{
+								return true;
+							}
+						}
+					}
+				}
+				
+				let y = y + 1;
+				
+			}
+			
+			let x = x + 1;
+			
+		}
+		
+		return false;
+	}
+	
+	method bool checkLeftHorizontal(int x, int y)
+	{
+		if ((tokenGrid.get(x,y) = tokenGrid.get(x - 1, y)) & (tokenGrid.get(x,y) = tokenGrid.get(x - 2, y)) & (tokenGrid.get(x,y) = tokenGrid.get(x - 3, y)))
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
+	method bool checkRightHorizontal(int x, int y)
+	{
+		if ((tokenGrid.get(x,y) = tokenGrid.get(x + 1, y)) & (tokenGrid.get(x,y) = tokenGrid.get(x + 2, y)) & (tokenGrid.get(x,y) = tokenGrid.get(x + 3, y)))
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
+	method bool checkDownVertical(int x, int y)
+	{
+		if ((tokenGrid.get(x,y) = tokenGrid.get(x, y + 1)) & (tokenGrid.get(x,y) = tokenGrid.get(x, y + 2)) & (tokenGrid.get(x,y) = tokenGrid.get(x, y + 3)))
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
+	method bool checkDownLeftDiagonal(int x, int y)
+	{
+		if ((tokenGrid.get(x,y) = tokenGrid.get(x - 1, y + 1)) & (tokenGrid.get(x,y) = tokenGrid.get(x - 2, y + 2)) & (tokenGrid.get(x,y) = tokenGrid.get(x - 3, y + 3)))
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
+	method bool checkDownRightDiagonal(int x, int y)
+	{
+		if ((tokenGrid.get(x,y) = tokenGrid.get(x + 1, y + 1)) & (tokenGrid.get(x,y) = tokenGrid.get(x + 2, y + 2)) & (tokenGrid.get(x,y) = tokenGrid.get(x + 3, y + 3)))
+		{
+			return true;
+		}
+		
+		return false;
+	}
+	
+	method void reset()
+	{
+		var int i, j;
+		
+		let i = 0;
+		
+		while (i < 7)
+		{
+			let j = 0;
+			
+			while (j < 6)
+			{
+				do tokenGrid.set(i, j, 0);
+				
+				let j = j + 1;
+			}
+			
+			let i = i + 1;
+		}
+		
+		return;
+	}
+	
+	method void dispose()
+	{
+		do token.dispose();
+		do tokenGrid.dispose();
+		do Memory.deAlloc(this);
+		return;
+	}
+}
