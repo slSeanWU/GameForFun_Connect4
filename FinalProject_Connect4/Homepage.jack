@@ -1,0 +1,118 @@
+class Homepage
+{
+	field ConnectGame game;
+	field int menuOption;
+	
+	constructor Homepage new()
+	{
+		let game = ConnectGame.new(0);
+		let menuOption = 0;	
+		return this;
+	}
+	
+	// show game title, instructions & enable user to interact with menu
+	method void exec()
+	{
+		// Draw the homepage
+		do Homepage.draw(menuOption);
+		
+		// menu operations
+		while (~ ( (Keyboard.keyPressed() = 128) & (menuOption = 1) ) // exit the game
+		{
+			if ((Keyboard.keyPressed() = 128) & (menuOption = 0))
+			{
+				do game.play();
+				do Sys.wait(100);
+			}
+
+			if ((Keyboard.keyPressed() = 132) & (menuOption = 0))
+			{
+				let menuOption = 1;
+				do Homepage.indicator(menuOption);
+				do Sys.wait(100);
+			}
+
+			if ((Keyboard.keyPressed() = 130) & (menuOption = 1))
+			{
+				let menuOption = 0;
+				do Homepage.indicator(menuOption);
+				do Sys.wait(100);
+			}
+			
+			do Sys.wait(100);
+		}
+		
+		return;
+	}
+	
+	function void draw(int op)
+	{
+		// draw the game's logo.
+		do Screen.clearScreen();
+		do Output.moveCursor(3, 28);
+		do Output.printString("Connect 4");
+		do Screen.setColor(true);
+		do Screen.drawCircle(195, 60, 5);
+		do Screen.drawCircle(227, 66, 5);
+		do Screen.drawCircle(270, 63, 5);
+		do Screen.drawCircle(314, 61, 5);
+		do Screen.drawLine(195, 60, 227, 66);
+		do Screen.drawLine(227, 66, 270, 63);
+		do Screen.drawLine(270, 63, 314, 61);
+		
+
+		// show target & instructions
+		do Output.moveCursor(7, 29);
+		do Output.printString("Target");
+		do Output.moveCursor(9, 6);
+		do Output.printString("Form a horizontal, vertical or diagonal line of 4 discs");
+		do Output.moveCursor(10, 12);
+		do Output.printString("before your opponent does so; then you WIN!!");
+		
+		do Output.moveCursor(12, 26);
+		do Output.printString("How to Play");
+		do Output.moveCursor(14, 6);
+		do Output.printString("Use LEFT & RIGHT arrow key to switch between columns;");
+		do Output.moveCursor(15, 11);
+		do Output.printString("then, press DOWN arrow key to place your disc.");
+
+		
+		// show menu options.
+		do Output.moveCursor(18, 15);
+		do Output.printString("Play");
+		do Output.moveCursor(18, 44);
+		do Output.printString("Quit");
+		do Homepage.indicator(op);
+		
+		return;
+	}
+	
+	// tell user the current menu selection
+	function void indicator(int op)
+	{	
+		if (op = 0)
+		{
+			do Output.moveCursor(18, 41);
+			do Output.printString("  ");
+			do Output.moveCursor(18, 12);
+			do Output.printString(">>");
+		}
+		
+		if (op = 1)
+		{
+			do Output.moveCursor(18, 41);
+			do Output.printString(">>");
+			do Output.moveCursor(18, 12);
+			do Output.printString("  ");
+		}
+
+		return;
+	}
+	
+	method void clear()
+	{
+		do game.clear();
+		do Memory.deAlloc(this);
+		return;
+	}
+}

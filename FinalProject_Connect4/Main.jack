@@ -1,0 +1,13 @@
+class Main
+{
+	// run the homepage
+	function void main()
+	{
+        var Homepage hp;
+        let hp = Homepage.new();
+        do hp.exec();
+        do hp.clear();
+
+        return;
+	}
+}
