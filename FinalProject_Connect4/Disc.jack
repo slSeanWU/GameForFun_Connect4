@@ -1,0 +1,47 @@
+class Disc{
+	field int color;
+	
+	constructor Disc new(int c){
+		let color = c;
+		return this;
+	}
+	
+	method void drawDisc(int col, int row){
+		var int x, y;
+		let x = 143 + (col*26);
+		let y = 193 - (row*26);
+		
+		if( color = 1 ){
+			do Screen.setColor(true);
+			do Screen.drawCircle(x, y, 11);
+			do Screen.setColor(false);
+			do Screen.drawCircle(x, y, 10);
+			do Screen.setColor(true);
+			do Screen.drawCircle(x, y, 9);
+			do Screen.setColor(false);
+			do Screen.drawCircle(x, y, 7);
+		}
+		else{
+			do Screen.setColor(true);
+			do Screen.drawCircle(x, y, 11);
+			do Screen.setColor(false);
+			do Screen.drawCircle(x, y, 9);
+			do Screen.setColor(true);
+			do Screen.drawCircle(x, y, 8);
+		}
+		
+		return;
+	}
+	
+	method void eraseDisc(int col, int row){
+		var int x, y;
+		let x = 143 + (col*26);
+		let y = 193 - (row*26);
+		
+		do Screen.setColor(false);
+		do Screen.drawCircle(x, y, 11);
+		
+		return;
+	}
+			
+}
