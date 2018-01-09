@@ -1,13 +1,97 @@
 class ConnectGame{
 	field Grid grid;
+	field Disc tmp;
 	field int current_p, current_col, steps;
 	
 	constructor ConnectGame new(){
 		let grid = Grid.new();
-		let current_p = 0;
+		let current_p = 1;
 		let current_col = 3;
 		let steps = 0;
+		let tmp = Disc.new(1);
 		
 		return this;
+	}
+	
+	method int checkWin(int p){
+		return 0;
+	}
+	
+	method void play(){
+		do Screen.clearScreen();
+		
+		do Output.moveCursor(7, 1);
+		do Output.printString("Switch columns");
+		do Output.moveCursor(9, 6);
+		do Output.printString("Press");
+		do Output.moveCursor(10, 2);
+		do Output.printString("LEFT & RIGHT");
+		do Output.moveCursor(13, 1);
+		do Output.printString("Confirm action");
+		do Output.moveCursor(15, 3);
+		do Output.printString("Press DOWN");
+		
+		do grid.drawGrid();
+		//do grid.drawTurn(current_p);
+		do tmp.drawDisc(current_col, 6);
+		
+		while( (steps < 42) & ( ~(Keyboard.keyPressed() = 81) ) ){
+			
+			if( (Keyboard.keyPressed() = 133) & ( grid.getStack(current_col) < 6 ) ){
+				do tmp.eraseDisc(current_col, 6);
+				do tmp.drawDisc( current_col, grid.getStack(current_col) );
+				do grid.setRec( current_col, grid.getStack(current_col), current_p );
+				do grid.setStack( current_col, grid.getStack(current_col) + 1 );
+				do tmp.clear();
+				
+				let steps = steps + 1;
+				let current_col = 3;
+				
+				if( checkWin( current_p ) ){
+					do Output.moveCursor( 15, 48 );
+					do Output.printString("Player Win!!!");
+					
+					while( ~(Keyboard.keyPressed() = 81) ){
+						do Sys.wait(20);
+					}
+				}
+				if( steps = 42 ){
+					do Output.moveCursor( 15, 48 );
+					do Output.printString("Game Tied!!");
+					
+					while( ~(Keyboard.keyPressed() = 81) ){
+						do Sys.wait(20);
+					}
+				}
+				
+				
+				if( current_p = 1 ){
+					let current_p = 2;
+				}
+				else{
+					let current_p = 1;
+				}
+				do Sys.wait(300);
+				let tmp = Disc.new(current_p);
+				do tmp.drawDisc(current_col, 6);
+			}
+			
+			if( (Keyboard.keyPressed() = 130) & (current_col > 0) ){
+				do tmp.eraseDisc(current_col, 6);
+				do tmp.drawDisc(current_col-1, 6);
+				
+				let current_col = current_col-1;
+				do Sys.wait(100);
+			}
+			if( (Keyboard.keyPressed() = 132) & (current_col < 6) ){
+				do tmp.eraseDisc(current_col, 6);
+				do tmp.drawDisc(current_col+1, 6);
+				
+				let current_col = current_col+1;
+				do Sys.wait(100);
+			}
+		}
+			
+		return;	
 	}
 }

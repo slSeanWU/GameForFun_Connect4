@@ -1,0 +1,127 @@
+function Disc.new 0
+push constant 1
+call Memory.alloc 1
+pop pointer 0
+push argument 0
+pop this 0
+push pointer 0
+return
+function Disc.drawDisc 2
+push argument 0
+pop pointer 0
+push constant 143
+push argument 1
+push constant 26
+call Math.multiply 2
+add
+pop local 0
+push constant 193
+push argument 2
+push constant 26
+call Math.multiply 2
+sub
+pop local 1
+push this 0
+push constant 2
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push local 0
+push local 1
+push constant 11
+call Screen.drawCircle 3
+pop temp 0
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push local 0
+push local 1
+push constant 10
+call Screen.drawCircle 3
+pop temp 0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push local 0
+push local 1
+push constant 9
+call Screen.drawCircle 3
+pop temp 0
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push local 0
+push local 1
+push constant 7
+call Screen.drawCircle 3
+pop temp 0
+goto IF_END0
+label IF_FALSE0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push local 0
+push local 1
+push constant 11
+call Screen.drawCircle 3
+pop temp 0
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push local 0
+push local 1
+push constant 9
+call Screen.drawCircle 3
+pop temp 0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push local 0
+push local 1
+push constant 8
+call Screen.drawCircle 3
+pop temp 0
+label IF_END0
+push constant 0
+return
+function Disc.eraseDisc 2
+push argument 0
+pop pointer 0
+push constant 143
+push argument 1
+push constant 26
+call Math.multiply 2
+add
+pop local 0
+push constant 193
+push argument 2
+push constant 26
+call Math.multiply 2
+sub
+pop local 1
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push local 0
+push local 1
+push constant 11
+call Screen.drawCircle 3
+pop temp 0
+push constant 0
+return
+function Disc.clear 0
+push argument 0
+pop pointer 0
+push pointer 0
+call Memory.deAlloc 1
+pop temp 0
+push constant 0
+return

@@ -11,7 +11,7 @@ class Disc{
 		let x = 143 + (col*26);
 		let y = 193 - (row*26);
 		
-		if( color = 1 ){
+		if( color = 2 ){
 			do Screen.setColor(true);
 			do Screen.drawCircle(x, y, 11);
 			do Screen.setColor(false);
@@ -43,5 +43,9 @@ class Disc{
 		
 		return;
 	}
-			
+	
+	method void clear(){
+		do Memory.deAlloc(this);
+		return;
+	}
 }

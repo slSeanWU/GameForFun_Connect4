@@ -5,7 +5,7 @@ class Homepage
 	
 	constructor Homepage new()
 	{
-		let game = ConnectGame.new(0);
+		let game = ConnectGame.new();
 		let menuOption = 0;	
 		return this;
 	}
@@ -17,7 +17,7 @@ class Homepage
 		do Homepage.draw(menuOption);
 		
 		// menu operations
-		while (~ ( (Keyboard.keyPressed() = 128) & (menuOption = 1) ) // exit the game
+		while ( ~( (Keyboard.keyPressed() = 128)  & (menuOption = 1) ) ) // exit the game
 		{
 			if ((Keyboard.keyPressed() = 128) & (menuOption = 0))
 			{
@@ -29,17 +29,17 @@ class Homepage
 			{
 				let menuOption = 1;
 				do Homepage.indicator(menuOption);
-				do Sys.wait(100);
+				do Sys.wait(50);
 			}
 
 			if ((Keyboard.keyPressed() = 130) & (menuOption = 1))
 			{
 				let menuOption = 0;
 				do Homepage.indicator(menuOption);
-				do Sys.wait(100);
+				do Sys.wait(50);
 			}
 			
-			do Sys.wait(100);
+			do Sys.wait(50);
 		}
 		
 		return;
@@ -111,7 +111,7 @@ class Homepage
 	
 	method void clear()
 	{
-		do game.clear();
+		//do game.clear();
 		do Memory.deAlloc(this);
 		return;
 	}

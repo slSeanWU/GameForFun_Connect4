@@ -1,0 +1,213 @@
+function Grid.new 3
+push constant 5
+call Memory.alloc 1
+pop pointer 0
+push constant 130
+pop this 0
+push constant 50
+pop this 1
+push constant 26
+pop this 2
+push constant 7
+call Array.new 1
+pop this 3
+push constant 7
+call Array.new 1
+pop this 4
+push constant 0
+pop local 0
+label WHILE_EXP0
+push local 0
+push constant 7
+lt
+not
+if-goto WHILE_END0
+push local 0
+push this 4
+add
+push constant 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push this 3
+add
+push constant 6
+call Array.new 1
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 0
+push this 3
+add
+pop pointer 1
+push that 0
+pop local 2
+push constant 0
+pop local 1
+label WHILE_EXP1
+push local 1
+push constant 6
+lt
+not
+if-goto WHILE_END1
+push local 1
+push local 2
+add
+push constant 0
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push local 1
+push constant 1
+add
+pop local 1
+goto WHILE_EXP1
+label WHILE_END1
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push pointer 0
+return
+function Grid.drawGrid 3
+push argument 0
+pop pointer 0
+push constant 0
+pop local 0
+push constant 128
+push constant 50
+push constant 128
+push constant 208
+call Screen.drawLine 4
+pop temp 0
+push constant 129
+push constant 50
+push constant 129
+push constant 208
+call Screen.drawLine 4
+pop temp 0
+label WHILE_EXP0
+push local 0
+push constant 8
+lt
+not
+if-goto WHILE_END0
+push this 0
+push local 0
+push this 2
+call Math.multiply 2
+add
+pop local 1
+push local 1
+push constant 50
+push local 1
+push constant 206
+call Screen.drawLine 4
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push constant 313
+push constant 50
+push constant 313
+push constant 208
+call Screen.drawLine 4
+pop temp 0
+push constant 314
+push constant 50
+push constant 314
+push constant 208
+call Screen.drawLine 4
+pop temp 0
+push constant 0
+pop local 0
+label WHILE_EXP1
+push local 0
+push constant 7
+lt
+not
+if-goto WHILE_END1
+push this 1
+push local 0
+push this 2
+call Math.multiply 2
+add
+pop local 2
+push constant 130
+push local 2
+push constant 312
+push local 2
+call Screen.drawLine 4
+pop temp 0
+push local 0
+push constant 1
+add
+pop local 0
+goto WHILE_EXP1
+label WHILE_END1
+push constant 128
+push constant 207
+push constant 314
+push constant 207
+call Screen.drawLine 4
+pop temp 0
+push constant 128
+push constant 208
+push constant 314
+push constant 208
+call Screen.drawLine 4
+pop temp 0
+push constant 0
+return
+function Grid.getStack 1
+push argument 0
+pop pointer 0
+push argument 1
+push this 4
+add
+pop pointer 1
+push that 0
+pop local 0
+push local 0
+return
+function Grid.setStack 0
+push argument 0
+pop pointer 0
+push argument 1
+push this 4
+add
+push argument 2
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 0
+return
+function Grid.setRec 1
+push argument 0
+pop pointer 0
+push argument 1
+push this 3
+add
+pop pointer 1
+push that 0
+pop local 0
+push argument 2
+push local 0
+add
+push argument 3
+pop temp 0
+pop pointer 1
+push temp 0
+pop that 0
+push constant 0
+return

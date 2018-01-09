@@ -1,11 +1,32 @@
 class Grid{
 	field int leftBound, upperBound;
 	field int blockSize;
+	field Array recCol, stack;
 	
 	constructor Grid new(){
+		var int i, j;
+		var Array recRow;
+		
 		let leftBound = 130;
 		let upperBound = 50;
 		let blockSize = 26;
+		
+		let recCol = Array.new(7);
+		let stack = Array.new(7);
+		
+		let i = 0;
+		while( i < 7 ){
+			let stack[i] = 0;
+			let recCol[i] = Array.new(6);
+			let recRow = recCol[i];
+
+			let j = 0;
+			while( j < 6 ){
+				let recRow[j] = 0;
+				let j = j + 1;
+			}
+			let i = i + 1;
+		}
 		
 		return this;
 	}
@@ -35,4 +56,26 @@ class Grid{
 		
 		return;
 	}
+	
+	method int getStack(int col){
+		var int ret;
+		let ret = stack[col];
+		
+		return ret;
+	}
+	
+	method void setStack(int col, int top){
+		let stack[col] = top;
+		return;
+	}
+	
+	method void setRec(int col, int row, int p){
+		var Array getRow;
+		let getRow = recCol[col];
+		let getRow[row] = p;
+		
+		return;
+	}
+	
+	
 }
