@@ -211,3 +211,220 @@ push temp 0
 pop that 0
 push constant 0
 return
+function Grid.getRec 2
+push argument 0
+pop pointer 0
+push argument 1
+push this 3
+add
+pop pointer 1
+push that 0
+pop local 0
+push argument 2
+push local 0
+add
+pop pointer 1
+push that 0
+pop local 1
+push local 1
+return
+function Grid.judgeHor 0
+push argument 0
+pop pointer 0
+push pointer 0
+push argument 1
+push argument 2
+call Grid.getRec 3
+push argument 3
+eq
+push pointer 0
+push argument 1
+push constant 1
+add
+push argument 2
+call Grid.getRec 3
+push argument 3
+eq
+and
+push pointer 0
+push argument 1
+push constant 2
+add
+push argument 2
+call Grid.getRec 3
+push argument 3
+eq
+and
+push pointer 0
+push argument 1
+push constant 3
+add
+push argument 2
+call Grid.getRec 3
+push argument 3
+eq
+and
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+not
+return
+goto IF_END0
+label IF_FALSE0
+push constant 0
+return
+label IF_END0
+function Grid.judgeVert 0
+push argument 0
+pop pointer 0
+push pointer 0
+push argument 1
+push argument 2
+call Grid.getRec 3
+push argument 3
+eq
+push pointer 0
+push argument 1
+push argument 2
+push constant 1
+add
+call Grid.getRec 3
+push argument 3
+eq
+and
+push pointer 0
+push argument 1
+push argument 2
+push constant 2
+add
+call Grid.getRec 3
+push argument 3
+eq
+and
+push pointer 0
+push argument 1
+push argument 2
+push constant 3
+add
+call Grid.getRec 3
+push argument 3
+eq
+and
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+not
+return
+goto IF_END0
+label IF_FALSE0
+push constant 0
+return
+label IF_END0
+function Grid.judgeDiaLeft 0
+push argument 0
+pop pointer 0
+push pointer 0
+push argument 1
+push argument 2
+call Grid.getRec 3
+push argument 3
+eq
+push pointer 0
+push argument 1
+push constant 1
+sub
+push argument 2
+push constant 1
+add
+call Grid.getRec 3
+push argument 3
+eq
+and
+push pointer 0
+push argument 1
+push constant 2
+sub
+push argument 2
+push constant 2
+add
+call Grid.getRec 3
+push argument 3
+eq
+and
+push pointer 0
+push argument 1
+push constant 3
+sub
+push argument 2
+push constant 3
+add
+call Grid.getRec 3
+push argument 3
+eq
+and
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+not
+return
+goto IF_END0
+label IF_FALSE0
+push constant 0
+return
+label IF_END0
+function Grid.judgeDiaRight 0
+push argument 0
+pop pointer 0
+push pointer 0
+push argument 1
+push argument 2
+call Grid.getRec 3
+push argument 3
+eq
+push pointer 0
+push argument 1
+push constant 1
+add
+push argument 2
+push constant 1
+add
+call Grid.getRec 3
+push argument 3
+eq
+and
+push pointer 0
+push argument 1
+push constant 2
+add
+push argument 2
+push constant 2
+add
+call Grid.getRec 3
+push argument 3
+eq
+and
+push pointer 0
+push argument 1
+push constant 3
+add
+push argument 2
+push constant 3
+add
+call Grid.getRec 3
+push argument 3
+eq
+and
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+not
+return
+goto IF_END0
+label IF_FALSE0
+push constant 0
+return
+label IF_END0

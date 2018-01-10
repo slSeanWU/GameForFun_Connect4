@@ -73,9 +73,55 @@ class Grid{
 		var Array getRow;
 		let getRow = recCol[col];
 		let getRow[row] = p;
-		
 		return;
 	}
 	
+	method int getRec(int col, int row){
+		var Array getRow;
+		var int ret;
+		let getRow = recCol[col];
+		let ret = getRow[row];
+		
+		return ret;
+	}
 	
+	method boolean judgeHor(int col, int row, int p){
+		if( ( getRec(col, row) = p ) & ( getRec(col + 1, row) = p ) &
+			( getRec(col + 2, row) = p ) & ( getRec(col + 3, row) = p ) ){
+				return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	method boolean judgeVert(int col, int row, int p){
+		if( ( getRec(col, row) = p ) & ( getRec(col, row + 1) = p ) &
+			( getRec(col, row + 2) = p ) & ( getRec(col, row + 3) = p ) ){
+				return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	method boolean judgeDiaLeft(int col, int row, int p){
+		if( ( getRec(col, row) = p ) & ( getRec(col - 1, row + 1) = p ) &
+			( getRec(col - 2, row + 2) = p ) & ( getRec(col - 3, row + 3) = p ) ){
+				return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	method boolean judgeDiaRight(int col, int row, int p){
+		if( ( getRec(col, row) = p ) & ( getRec(col + 1, row + 1) = p ) &
+			( getRec(col + 2, row + 2) = p ) & ( getRec(col + 3, row + 3) = p ) ){
+				return true;
+		}
+		else{
+			return false;
+		}
+	}
 }
