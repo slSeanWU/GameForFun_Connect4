@@ -7,7 +7,7 @@ class Main
 		var int menuOption;
 		
 		let menuOption = 0;
-		do Main.drawHomepage(menuOption);
+		do Main.drawHomepage();
 		
 		// menu operations
 		while ( ~( (Keyboard.keyPressed() = 128)  & (menuOption = 1) ) ) // exit the game
@@ -16,9 +16,10 @@ class Main
 			{
 				let game = ConnectGame.new();
 				do game.play();
-				do Sys.wait(500);
+				do game.clear();
+				do Sys.wait(300);
 				do Screen.clearScreen();
-				do Main.drawHomepage(0);
+				do Main.drawHomepage();
 			}
 
 			if ((Keyboard.keyPressed() = 132) & (menuOption = 0))
@@ -41,7 +42,7 @@ class Main
 		return;
 	}
 	
-	function void drawHomepage(int op)
+	function void drawHomepage()
 	{
 		// draw the game's logo.
 		do Screen.clearScreen();
@@ -78,7 +79,7 @@ class Main
 		do Output.printString("Play");
 		do Output.moveCursor(18, 44);
 		do Output.printString("Quit");
-		do Main.indicator(op);
+		do Main.indicator(0);
 		
 		return;
 	}
@@ -103,6 +104,5 @@ class Main
 		}
 
 		return;
-	}
-	
+	}	
 }

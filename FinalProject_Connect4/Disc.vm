@@ -6,6 +6,75 @@ push argument 0
 pop this 0
 push pointer 0
 return
+function Disc.winningAnima 2
+push argument 0
+call Disc.new 1
+pop local 0
+push constant 0
+pop local 1
+label WHILE_EXP0
+push local 1
+push constant 3
+lt
+not
+if-goto WHILE_END0
+push constant 300
+call Sys.wait 1
+pop temp 0
+push local 0
+push argument 1
+push argument 2
+call Disc.eraseDisc 3
+pop temp 0
+push local 0
+push argument 3
+push argument 4
+call Disc.eraseDisc 3
+pop temp 0
+push local 0
+push argument 5
+push argument 6
+call Disc.eraseDisc 3
+pop temp 0
+push local 0
+push argument 7
+push argument 8
+call Disc.eraseDisc 3
+pop temp 0
+push constant 300
+call Sys.wait 1
+pop temp 0
+push local 0
+push argument 1
+push argument 2
+call Disc.drawDisc 3
+pop temp 0
+push local 0
+push argument 3
+push argument 4
+call Disc.drawDisc 3
+pop temp 0
+push local 0
+push argument 5
+push argument 6
+call Disc.drawDisc 3
+pop temp 0
+push local 0
+push argument 7
+push argument 8
+call Disc.drawDisc 3
+pop temp 0
+push local 1
+push constant 1
+add
+pop local 1
+goto WHILE_EXP0
+label WHILE_END0
+push local 0
+call Disc.clear 1
+pop temp 0
+push constant 0
+return
 function Disc.drawDisc 2
 push argument 0
 pop pointer 0

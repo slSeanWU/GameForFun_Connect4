@@ -19,24 +19,26 @@ class ConnectGame{
 		
 		do Screen.clearScreen();
 		
-		/*do Output.moveCursor(7, 1);
+		/*do Output.moveCursor(7, 45);
 		do Output.printString("Switch columns");
-		do Output.moveCursor(9, 6);
+		do Output.moveCursor(9, 50);
 		do Output.printString("Press");
-		do Output.moveCursor(10, 2);
+		do Output.moveCursor(10, 46);
 		do Output.printString("LEFT & RIGHT");
-		do Output.moveCursor(13, 1);
+		do Output.moveCursor(13, 45);
 		do Output.printString("Confirm action");
-		do Output.moveCursor(15, 3);
+		do Output.moveCursor(15, 47);
 		do Output.printString("Press DOWN");*/
+		do Output.moveCursor(22, 58);
+		do Output.printString("(Q)uit"); 
 		
 		do grid.drawGrid();
 		do drawTurn(current_p);
 		do tmp.drawDisc(current_col, 6);
 		
-		while( (steps < 42) & ( ~(Keyboard.keyPressed() = 81) ) ){
+		while( (steps < 42) & ( ~(Keyboard.keyPressed() = 81) ) ){ // not tied & (Q) not pressed
 			
-			if( ( Keyboard.keyPressed() = 133 ) & ( grid.getStack(current_col) < 6 ) ){
+			if( ( Keyboard.keyPressed() = 133 ) & ( grid.getStack(current_col) < 6 ) ){ // placing disc
 				do tmp.eraseDisc(current_col, 6);
 				do tmp.drawDisc( current_col, grid.getStack(current_col) );
 				do grid.setRec( current_col, grid.getStack(current_col), current_p );
@@ -46,6 +48,7 @@ class ConnectGame{
 				let steps = steps + 1;
 				let current_col = 3;
 				
+				// win
 				if( (steps > 3) & ( checkWin( current_p ) ) ){
 					do ConnectGame.winningMessage( current_p );
 					let end = true;
@@ -54,6 +57,7 @@ class ConnectGame{
 						do Sys.wait(20);
 					}
 				}
+				// tied
 				if( steps = 42 ){
 					do ConnectGame.tiedMessage();
 					let end = true;
@@ -63,6 +67,7 @@ class ConnectGame{
 					}
 				}
 				
+				// otherwise, switch
 				if(~end){
 					if( current_p = 1 ){
 						let current_p = 2;
@@ -77,6 +82,7 @@ class ConnectGame{
 				}
 			}
 			
+			// change columns
 			if( (Keyboard.keyPressed() = 130) & (current_col > 0) ){
 				do tmp.eraseDisc(current_col, 6);
 				do tmp.drawDisc(current_col-1, 6);
@@ -98,19 +104,25 @@ class ConnectGame{
 	
 	method void drawTurn(int p){
 		do Screen.setColor(true);
-		do Screen.drawRectangle(12, 104, 116, 186);
+		do Screen.drawRectangle(12, 108, 116, 188);
 		do Screen.setColor(false);
-		do Screen.drawRectangle(14, 106, 114, 184);
+		do Screen.drawRectangle(14, 110, 114, 186);
 		do Output.moveCursor(11, 5);
-		do Output.printString("Player");
 		
 		if( p = 1 ){
+			do Screen.setColor(true);
+			do Screen.drawRectangle(16, 112, 112, 184);
+			do Screen.setColor(false);
+			do Screen.drawRectangle(19, 115, 109, 181);
+			
+			do Output.printString("Player");
 			do Output.moveCursor(13, 5);
 			do Output.printString("BLACK's");
 			do Output.moveCursor(15, 6);
 			do Output.printString("turn");
 		}
 		else{
+			do Output.printString("Player");
 			do Output.moveCursor(13, 5);
 			do Output.printString("WHITE's");
 			do Output.moveCursor(15, 6);
@@ -132,7 +144,7 @@ class ConnectGame{
 				if( grid.getRec(col, row) = p ){
 					
 					if( (col < 3) & (row < 3) ){
-						if( (grid.judgeHor(col, row, p)) | (grid.judgeVert(col, row, p)) | (grid.judgeVert(col, row, p)) | (grid.judgeDiaRight(col, row, p)) ){
+						if( (grid.judgeHor(col, row, p)) | (grid.judgeVert(col, row, p)) | (grid.judgeDiaRight(col, row, p)) ){
 							return true;
 						}
 					}
@@ -163,9 +175,17 @@ class ConnectGame{
 	}
 	
 	function void winningMessage(int p){
-		do Screen.setColor(false);
-		do Screen.drawCircle(220, 127, 82);
+		var int i;
+		let i = 6;
 		
+		do Screen.setColor(false);
+		while( i < 87 ){
+			do Screen.drawCircle(220, 127, i);
+			do Sys.wait(25);
+			
+			let i = i + 5;
+		}
+			
 		do Output.moveCursor(9, 22);
 		if( p = 1 ){
 			do Output.printString("Player Black");
@@ -183,16 +203,31 @@ class ConnectGame{
 	}
 	
 	function void tiedMessage(){
-		do Screen.setColor(false);
-		do Screen.drawCircle(220, 127, 82);
+		var int i;
+		let i = 6;
 		
-		do Output.moveCursor(9, 23);
+		do Screen.setColor(false);
+		while( i < 87 ){
+			do Screen.drawCircle(220, 127, i);
+			do Sys.wait(25);
+			
+			let i = i + 5;
+		}
+		
+		do Output.moveCursor(9, 24);
 		do Output.printString("Uh, oh!");
-		do Output.moveCursor(11, 22);
+		do Output.moveCursor(11, 23);
 		do Output.printString("Game TIED");
 		
 		do Output.moveCursor(14, 19);
 		do Output.printString("Press Q to go back");
+		
+		return;
+	}
+	
+	method void clear(){
+		do grid.clear();
+		do Memory.deAlloc(this);
 		
 		return;
 	}
