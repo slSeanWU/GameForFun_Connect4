@@ -58,6 +58,61 @@ class Grid{
 		return;
 	}
 	
+	method void drawArrow(int col, int p){
+		var int i;
+		let i = 10;
+		do Screen.setColor(true);
+		do Screen.drawRectangle(138 + (26*col), 212, 148 + (26*col), 226);
+		
+		while( i > 0 ){
+			do Screen.drawLine( 143-i+(26*col), 224+(10-i), 143+i+(26*col), 224+(10-i));
+			let i = i - 1;
+		}
+		
+		if( p = 2 ){
+			do Screen.setColor(false);
+			do Screen.drawRectangle(140 + (26*col), 214, 146 + (26*col), 224);
+			
+			let i = 8;
+			while( i > 0 ){
+				do Screen.drawLine( 144-i+(26*col), 224+(9-i), 142+i+(26*col), 224+(9-i));
+				let i = i - 1;
+			}
+		}	
+		
+		return;
+	}
+	
+	method void eraseArrow(int col){
+		do Screen.setColor(false);
+		do Screen.drawRectangle(128 + (26*col), 209, 160 + (26*col), 240);
+		
+		return;
+	}
+	
+	method void popOut(int col){
+		var Disc tmp;
+		var int i;
+		let i = 0;
+		
+		do setStack(col, stack[col] - 1);
+		while( i < stack[col] ){
+			do setRec( col, i, getRec(col, i + 1) );
+			let tmp = Disc.new( getRec(col, i) );
+			do tmp.drawDisc(col, i);
+			do tmp.clear();
+			
+			let i = i + 1;
+		}
+		
+		let tmp = Disc.new( getRec(col, i) );
+		do tmp.eraseDisc(col, i);
+		do tmp.clear();
+		do setRec(col, i, 0);
+		
+		return;
+	}
+	
 	method int getStack(int col){
 		var int ret;
 		let ret = stack[col];

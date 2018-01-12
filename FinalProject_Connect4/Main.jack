@@ -10,28 +10,30 @@ class Main
 		do Main.drawHomepage();
 		
 		// menu operations
-		while ( ~( (Keyboard.keyPressed() = 128)  & (menuOption = 1) ) ) // exit the game
+		while ( ~( (Keyboard.keyPressed() = 128)  & (menuOption = 2) ) ) // exit the game
 		{
-			if ((Keyboard.keyPressed() = 128) & (menuOption = 0))
+			if ((Keyboard.keyPressed() = 128) & ( (menuOption = 0) | (menuOption = 1) ))
 			{
 				let game = ConnectGame.new();
-				do game.play();
+				do game.play(menuOption);
 				do game.clear();
 				do Sys.wait(300);
+				
+				let menuOption = 0;
 				do Screen.clearScreen();
 				do Main.drawHomepage();
 			}
 
-			if ((Keyboard.keyPressed() = 132) & (menuOption = 0))
+			if ((Keyboard.keyPressed() = 132) & (menuOption < 2))
 			{
-				let menuOption = 1;
+				let menuOption = menuOption + 1;
 				do Main.indicator(menuOption);
 				do Sys.wait(50);
 			}
 
-			if ((Keyboard.keyPressed() = 130) & (menuOption = 1))
+			if ((Keyboard.keyPressed() = 130) & (menuOption > 0))
 			{
-				let menuOption = 0;
+				let menuOption = menuOption - 1;
 				do Main.indicator(menuOption);
 				do Sys.wait(50);
 			}
@@ -49,13 +51,13 @@ class Main
 		do Output.moveCursor(3, 28);
 		do Output.printString("Connect 4");
 		do Screen.setColor(true);
-		do Screen.drawCircle(195, 60, 5);
+		do Screen.drawCircle(192, 60, 5);
 		do Screen.drawCircle(227, 66, 5);
 		do Screen.drawCircle(270, 63, 5);
-		do Screen.drawCircle(314, 61, 5);
-		do Screen.drawLine(195, 60, 227, 66);
+		do Screen.drawCircle(311, 59, 5);
+		do Screen.drawLine(192, 60, 227, 66);
 		do Screen.drawLine(227, 66, 270, 63);
-		do Screen.drawLine(270, 63, 314, 61);
+		do Screen.drawLine(270, 63, 311, 59);
 		
 
 		// show target & instructions
@@ -72,12 +74,17 @@ class Main
 		do Output.printString("Use LEFT & RIGHT arrow key to switch between columns;");
 		do Output.moveCursor(15, 11);
 		do Output.printString("then, press DOWN arrow key to place your disc.");
+		do Output.moveCursor(16, 5);
+		do Output.printString("(Or, remove your disc from the bottom in Pop-Out mode.)");
+		
 
 		
 		// show menu options.
-		do Output.moveCursor(18, 15);
-		do Output.printString("Play");
-		do Output.moveCursor(18, 44);
+		do Output.moveCursor(20, 15);
+		do Output.printString("Classic");
+		do Output.moveCursor(20, 29);
+		do Output.printString("Pop-Out");
+		do Output.moveCursor(20, 44);
 		do Output.printString("Quit");
 		do Main.indicator(0);
 		
@@ -89,18 +96,30 @@ class Main
 	{	
 		if (op = 0)
 		{
-			do Output.moveCursor(18, 41);
-			do Output.printString("  ");
-			do Output.moveCursor(18, 12);
+			do Output.moveCursor(20, 12);
 			do Output.printString(">>");
+			do Output.moveCursor(20, 26);
+			do Output.printString("  ");
+			do Output.moveCursor(20, 41);
+			do Output.printString("  ");
 		}
-		
 		if (op = 1)
 		{
-			do Output.moveCursor(18, 41);
-			do Output.printString(">>");
-			do Output.moveCursor(18, 12);
+			do Output.moveCursor(20, 12);
 			do Output.printString("  ");
+			do Output.moveCursor(20, 26);
+			do Output.printString(">>");
+			do Output.moveCursor(20, 41);
+			do Output.printString("  ");
+		}
+		if (op = 2)
+		{
+			do Output.moveCursor(20, 12);
+			do Output.printString("  ");
+			do Output.moveCursor(20, 26);
+			do Output.printString("  ");
+			do Output.moveCursor(20, 41);
+			do Output.printString(">>");
 		}
 
 		return;

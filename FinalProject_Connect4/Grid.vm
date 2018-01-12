@@ -168,6 +168,234 @@ call Screen.drawLine 4
 pop temp 0
 push constant 0
 return
+function Grid.drawArrow 1
+push argument 0
+pop pointer 0
+push constant 10
+pop local 0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push constant 138
+push constant 26
+push argument 1
+call Math.multiply 2
+add
+push constant 212
+push constant 148
+push constant 26
+push argument 1
+call Math.multiply 2
+add
+push constant 226
+call Screen.drawRectangle 4
+pop temp 0
+label WHILE_EXP0
+push local 0
+push constant 0
+gt
+not
+if-goto WHILE_END0
+push constant 143
+push local 0
+sub
+push constant 26
+push argument 1
+call Math.multiply 2
+add
+push constant 224
+push constant 10
+push local 0
+sub
+add
+push constant 143
+push local 0
+add
+push constant 26
+push argument 1
+call Math.multiply 2
+add
+push constant 224
+push constant 10
+push local 0
+sub
+add
+call Screen.drawLine 4
+pop temp 0
+push local 0
+push constant 1
+sub
+pop local 0
+goto WHILE_EXP0
+label WHILE_END0
+push argument 2
+push constant 2
+eq
+if-goto IF_TRUE0
+goto IF_FALSE0
+label IF_TRUE0
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push constant 140
+push constant 26
+push argument 1
+call Math.multiply 2
+add
+push constant 214
+push constant 146
+push constant 26
+push argument 1
+call Math.multiply 2
+add
+push constant 224
+call Screen.drawRectangle 4
+pop temp 0
+push constant 8
+pop local 0
+label WHILE_EXP1
+push local 0
+push constant 0
+gt
+not
+if-goto WHILE_END1
+push constant 144
+push local 0
+sub
+push constant 26
+push argument 1
+call Math.multiply 2
+add
+push constant 224
+push constant 9
+push local 0
+sub
+add
+push constant 142
+push local 0
+add
+push constant 26
+push argument 1
+call Math.multiply 2
+add
+push constant 224
+push constant 9
+push local 0
+sub
+add
+call Screen.drawLine 4
+pop temp 0
+push local 0
+push constant 1
+sub
+pop local 0
+goto WHILE_EXP1
+label WHILE_END1
+label IF_FALSE0
+push constant 0
+return
+function Grid.eraseArrow 0
+push argument 0
+pop pointer 0
+push constant 0
+call Screen.setColor 1
+pop temp 0
+push constant 128
+push constant 26
+push argument 1
+call Math.multiply 2
+add
+push constant 209
+push constant 160
+push constant 26
+push argument 1
+call Math.multiply 2
+add
+push constant 240
+call Screen.drawRectangle 4
+pop temp 0
+push constant 0
+return
+function Grid.popOut 2
+push argument 0
+pop pointer 0
+push constant 0
+pop local 1
+push pointer 0
+push argument 1
+push argument 1
+push this 4
+add
+pop pointer 1
+push that 0
+push constant 1
+sub
+call Grid.setStack 3
+pop temp 0
+label WHILE_EXP0
+push local 1
+push argument 1
+push this 4
+add
+pop pointer 1
+push that 0
+lt
+not
+if-goto WHILE_END0
+push pointer 0
+push argument 1
+push local 1
+push pointer 0
+push argument 1
+push local 1
+push constant 1
+add
+call Grid.getRec 3
+call Grid.setRec 4
+pop temp 0
+push pointer 0
+push argument 1
+push local 1
+call Grid.getRec 3
+call Disc.new 1
+pop local 0
+push local 0
+push argument 1
+push local 1
+call Disc.drawDisc 3
+pop temp 0
+push local 0
+call Disc.clear 1
+pop temp 0
+push local 1
+push constant 1
+add
+pop local 1
+goto WHILE_EXP0
+label WHILE_END0
+push pointer 0
+push argument 1
+push local 1
+call Grid.getRec 3
+call Disc.new 1
+pop local 0
+push local 0
+push argument 1
+push local 1
+call Disc.eraseDisc 3
+pop temp 0
+push local 0
+call Disc.clear 1
+pop temp 0
+push pointer 0
+push argument 1
+push local 1
+push constant 0
+call Grid.setRec 4
+pop temp 0
+push constant 0
+return
 function Grid.getStack 1
 push argument 0
 pop pointer 0
