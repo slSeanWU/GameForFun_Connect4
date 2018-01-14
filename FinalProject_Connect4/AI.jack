@@ -1,13 +1,16 @@
 class AI{
-	field int color;
+	field int color;  	//AI's color
+	field int p;  		//player's color
 	field Array priority;
 	field Grid grid;
 	field boolean AIcrashed;
-	field int randseed;
+	field int randseed, speakCnt;
+
 
 	constructor AI new(int c, Grid getGrid){
 		let randseed = 0;
 		let AIcrashed = 0;
+		let speakCnt = 0;
 		let grid = getGrid;
 		let priority = Array.new(7);
 		let priority[0] = 3;
@@ -18,11 +21,15 @@ class AI{
 		let priority[5] = 0;
 		let priority[6] = 6;
 		let color = c;
+
+		if (color = 1){
+			let p = 2;
+		}else{
+			let p = 1;
+		}
+
 		return this;
 	}
-
-
-
 
 
 
@@ -33,86 +40,55 @@ class AI{
 		let grid = getGrid;
 
 
-		if (grid.getSteps() = 0){
+		do speak();
+
+
+		if (grid.getSteps() = 0){  //first step is always 3
 			return 3;
 		}
-/*
-		let i = Brute_force();
-		if (i < 7){
-			return i;
-		}else{
-			return rand(randseed);
-		}
-*/
 
 
 		let i = Win(color);   //if I will win at the next step, just do it!
 		if (i < 7){
 			return i;
-		}else{
-			let i = BlockHorTwo();  //if there is _OO_ ("_" means blank), stop it
-			if (i < 7){
-				return i;
-			}
-			let toBlock = blockOppo();  //if opponent will win next step, block it!
-			if (toBlock < 7){
-				return toBlock;
-			}else{
-				if (grid.getSteps() = 2){
-					return rand(randseed);
-				}else{
-					let i = wannaWin();   //search existing line and trying to increase its length
-					if (i < 7){
-						return i;
-					}
-				}
+		}
+		
 
-
-				// last choice : according to the arbitrary priority
-				let i = 0;
-				while(~grid.legal(priority[i])){
-					let i = i + 1;
-				}
-				return priority[i];
-
-
-				//else (theoretically impossible to happen)
-				//do crashMessage();
-				//return rand(randseed);
-			}
+		let toBlock = blockOppo();  //if opponent will win next step, block it!
+		if (toBlock < 7){
+			return toBlock;
 		}
 
+
+		let i = wannaWin();   //search existing line and trying to increase its length
+		if (i < 7){
+			return i;
+		}
+
+
+		let i = nineGrid();   //last choice: according to the numbers same color in the 9-grids
+		return i;
+		
+		
 	}
-
-
-
-
-
-
-
 
 
 
 
 	method int blockOppo(){
-		var int p;
-		if (color = 1){
-			let p = 2;
-		}else{
-			let p = 1;
-		}
+		var int i;
 		
-		return Win(p);
+		let i = Win(p);
+		if (i < 7){
+			return i;
+		}
+
+		return BlockHorTwo();  //if there is _ O O _ ("_" means blank), stop it
 	}
 
 	method int BlockHorTwo(){
-		var int col, row, p;
-		if (color = 1){
-			let p = 2;
-		}else{
-			let p = 1;
-		}
-
+		var int col, row;
+		
 		let col = 0;
 		while(col < 7){
 
@@ -121,11 +97,13 @@ class AI{
 				if( grid.getRec(col, row) = p ){
 					if (col < 6){
 						if (judgeHor(col, row, p)){
-							if (((col > 0) & ((grid.getRec(col-1, row) = 0))) & (grid.getStack(col-1) = row)){
-								return (col-1);
-							}
-							if ((((col+2) < 7) & ((grid.getRec(col+2, row) = 0))) & (grid.getStack(col+2) = row)){
-								return (col+2);
+							if((grid.getStack(col-1) = row) & (grid.getStack(col+2) = row)){
+								if ( ((col > 0) & (grid.getRec(col-1, row) = 0)) & ~(grid.getRec(col+2, row) = color) ){
+									return (col-1);
+								}
+								if ( (((col+2) < 7) & (grid.getRec(col+2, row) = 0)) & ~(grid.getRec(col-1, row) = color) ){
+									return (col+2);
+								}
 							}
 						}
 					}
@@ -141,15 +119,8 @@ class AI{
 
 
 
-
-
-
-
-
-
-
-	method boolean judgeHor(int col, int row, int p){
-		if( ( grid.getRec(col, row) = p ) & ( grid.getRec(col + 1, row) = p )){
+	method boolean judgeHor(int col, int row, int c){
+		if( ( grid.getRec(col, row) = c ) & ( grid.getRec(col + 1, row) = c )){
 			return true;
 		}
 		else{
@@ -157,8 +128,8 @@ class AI{
 		}
 	}
 	
-	method boolean judgeVert(int col, int row, int p){
-		if( ( grid.getRec(col, row) = p ) & ( grid.getRec(col, row + 1) = p ) ){
+	method boolean judgeVert(int col, int row, int c){
+		if( ( grid.getRec(col, row) = c ) & ( grid.getRec(col, row + 1) = c ) ){
 			return true;
 		}
 		else{
@@ -166,8 +137,8 @@ class AI{
 		}
 	}
 	
-	method boolean judgeDiaLeft(int col, int row, int p){
-		if( ( grid.getRec(col, row) = p ) & ( grid.getRec(col - 1, row + 1) = p ) ){
+	method boolean judgeDiaLeft(int col, int row, int c){
+		if( ( grid.getRec(col, row) = c ) & ( grid.getRec(col - 1, row + 1) = c ) ){
 			return true;
 		}
 		else{
@@ -175,17 +146,16 @@ class AI{
 		}
 	}
 	
-	method boolean judgeDiaRight(int col, int row, int p){
-		if( ( grid.getRec(col, row) = p ) & ( grid.getRec(col + 1, row + 1) = p ) ){
+	method boolean judgeDiaRight(int col, int row, int c){
+		if( ( grid.getRec(col, row) = c ) & ( grid.getRec(col + 1, row + 1) = c ) ){
 			return true;
 		}
 		else{
 			return false;
 		}
 	}
-	
 
-	method int PossibleToWin(int p){ //if color p gonna win return its endpoint; otherwise, return 7.
+	method int PossibleToWin(int c){ //if color p gonna win return its endpoint; otherwise, return 7.
 		var int col, row;
 		let col = 0;
 		while( col < 7 ){
@@ -193,10 +163,10 @@ class AI{
 			let row = 0;
 			while( row < 6 ){
 				
-				if( grid.getRec(col, row) = p ){
+				if( grid.getRec(col, row) = c ){
 					
 					if (col < 6){
-						if (judgeHor(col, row, p)){
+						if (judgeHor(col, row, c)){
 							if (((col > 0) & ((grid.getRec(col-1, row) = 0))) & (grid.getStack(col-1) = row)){
 								return (col-1);
 							}
@@ -207,7 +177,7 @@ class AI{
 					}
 
 					if (row < 4){
-						if (judgeVert(col, row, p)){
+						if (judgeVert(col, row, c)){
 							if (((row+1) < 4) & ((grid.getRec(col, row+2) = 0))){
 								return col;
 							}
@@ -215,7 +185,7 @@ class AI{
 					}
 
 					if ((col < 5) & (row < 4)){
-						if (judgeDiaRight(col, row, p)){
+						if (judgeDiaRight(col, row, c)){
 							if ((((col+1) < 5) & ((row+1) < 4))
 								& ((grid.getRec(col+2, row+2) = 0))){
 								return (col+2);
@@ -224,7 +194,7 @@ class AI{
 					}
 
 					if ((col > 1) & (row > 1)){
-						if (judgeDiaLeft(col, row, p)){
+						if (judgeDiaLeft(col, row, c)){
 							if ((((col-1) > 1) & ((row+1) < 4))
 								& ((grid.getRec(col-2, row+2) = 0))){
 								return (col-2);
@@ -245,23 +215,14 @@ class AI{
 
 
 
-
-
-
-
-
-
-
-
-
-	method int Win(int p){   //check if the color will win at the next step
+	method int Win(int c){   //check if the color will win at the next step
 		var int col;
 		let col = 0;
 		while((col < 7)){
 			do grid.setTest(1);
-			do grid.setRec( col, grid.getStack(col), p );
+			do grid.setRec( col, grid.getStack(col), c );
 			do grid.setStack( col, grid.getStack(col) + 1 );
-			if (checkWin(p)){
+			if (checkWin(c)){
 				do grid.setTest(0);
 				do grid.setStack( col, grid.getStack(col) - 1 );
 				do grid.setRec( col, grid.getStack(col), 0 );
@@ -280,18 +241,6 @@ class AI{
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 	method int wannaWin(){
 		var int col;
 		let col = PossibleToWin(color);
@@ -304,12 +253,8 @@ class AI{
 	}
 
 	method boolean ThinkTwice(int col){
-		var int i, p;
-		if (color = 1){
-			let p = 2;
-		}else{
-			let p = 1;
-		}
+		var int i;
+
 		do grid.setTest(1);
 		do grid.setRec( col, grid.getStack(col), color );
 		do grid.setStack( col, grid.getStack(col) + 1 );
@@ -319,68 +264,14 @@ class AI{
 			do grid.setTest(0);
 			do grid.setStack( col, grid.getStack(col) - 1 );
 			do grid.setRec( col, grid.getStack(col), 0 );
-			return true;
+			return false;
 		}
 		do grid.setTest(0);
 		do grid.setStack( col, grid.getStack(col) - 1 );
 		do grid.setRec( col, grid.getStack(col), 0 );
 		
-		return false;
+		return true;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-	method boolean checkCrash(){
-		return AIcrashed;
-	}
-
-
-	method void crashMessage(){
-		let AIcrashed = 1;
-		do Output.moveCursor(6, 9);
-		do Output.printString("Oops! It seems that the AI was Fxxked up");
-		return;
-	}
-
-	method int rand(int randseed){
-		var int i;
-		let i = randseed - (randseed / 7);
-		while(grid.getStack(priority[i]) > 5){
-			let i = i + 1;
-			if (i > 6){
-				let i = i - 7;
-			}
-		}
-		return priority[i];
-	}
-
-	method void seedIncrease(){
-		let randseed = randseed + 1;
-		if (randseed > 6){
-			let randseed = randseed - 7;
-		}
-		return;
-	}
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -435,6 +326,90 @@ class AI{
 
 
 
+	method int nineGrid(){
+		var int index, max, i, j, cnt, max_col;
+		let max = 0;
+		let index = 0;
+		while(index < 7){
+			let cnt = 0;
+			let i = -1;
+			while(i < 2){
+				if ( ((priority[index]+i) > -1) & ((priority[index]+i) < 7) ){
+					let j = -1;
+					while(j < 2){
+						if ( ((grid.getStack(priority[index])+j) > -1) & ((grid.getStack(priority[index])+j) < 6) ){
+							if(grid.getRec(priority[index]+i, grid.getStack(priority[index])+j) = color){
+								let cnt = cnt + 1;
+							}
+						}
+						let j = j + 1;
+					}
+				}
+				let i = i + 1;
+			}
+			if (cnt > max){
+				let max = cnt;
+				let max_col = priority[index];
+			}
+
+			let index = index + 1;
+		}
+
+		return max_col;
+	}
+
+
+
+
+	method void speak(){
+		var int i;
+		let i = rand(randseed);
+		do Output.moveCursor(9, 50);
+		if (i < 5){
+			do grid.DrawDialogue(speakCnt);
+
+			if (i = 0){
+				do Output.moveCursor(5 + (speakCnt*5), 43);
+				do Output.printString("Too Young");
+				do Output.moveCursor(6 + (speakCnt*5), 43);
+				do Output.printString("    Too Simple~");
+			}
+
+			if (i = 1){
+				do Output.moveCursor(5 + (speakCnt*5), 43);
+				do Output.printString("HaHaHa      ");
+				do Output.moveCursor(6 + (speakCnt*5), 43);
+				do Output.printString("    UCCU~         ");
+			}
+
+			if (i = 2){
+				do Output.moveCursor(5 + (speakCnt*5), 43);
+				do Output.printString("It's easy   ");
+				do Output.moveCursor(6 + (speakCnt*5), 43);
+				do Output.printString("    Isn't it?     ");
+			}
+
+			if (i = 3){
+				do Output.moveCursor(5 + (speakCnt*5), 43);
+				do Output.printString("Hmmm...     ");
+				do Output.moveCursor(6 + (speakCnt*5), 43);
+				do Output.printString("    Omoshiroidesu~");
+			}
+
+			if (i = 4){
+				do Output.moveCursor(5 + (speakCnt*5), 43);
+				do Output.printString("Yamero-     ");
+				do Output.moveCursor(6 + (speakCnt*5), 43);
+				do Output.printString("    Don't do that!");
+			}
+
+			let speakCnt = speakCnt + 1;
+			if (speakCnt > 2){
+				let speakCnt = speakCnt - 3;
+			}
+		}
+		return;
+	}
 
 
 
@@ -447,7 +422,62 @@ class AI{
 
 
 
-/*
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	method void seedIncrease(){
+		let randseed = randseed + 1;
+		if (randseed > 6){
+			let randseed = randseed - 7;
+		}
+		do Sys.wait(10);
+		return;
+	}
+
+	method int rand(int randseed){
+		var int i;
+		let i = randseed - (randseed / 7);
+		while(grid.getStack(priority[i]) > 5){
+			let i = i + 1;
+			if (i > 6){
+				let i = i - 7;
+			}
+		}
+		return priority[i];
+	}
+
+
+
+
+/* 一些很有紀念意義的code
+
+
+	method boolean checkCrash(){
+		return AIcrashed;
+	}
+
+
+	method void crashMessage(){
+		let AIcrashed = 1;
+		do Output.moveCursor(6, 9);
+		do Output.printString("Oops! It seems that the AI was Fxxked up");
+		return;
+	}
+
+
+
 
 
 	method int Brute_force(){
@@ -530,7 +560,9 @@ class AI{
 
 		return temp_ans;
 	}
-}
+
 
 
 */
+
+}

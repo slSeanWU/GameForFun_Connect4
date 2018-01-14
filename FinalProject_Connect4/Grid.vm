@@ -837,3 +837,84 @@ push argument 1
 pop this 6
 push constant 0
 return
+function Grid.DrawDialogue 1
+push argument 0
+pop pointer 0
+push constant 55
+pop local 0
+push constant 0
+not
+call Screen.setColor 1
+pop temp 0
+push constant 330
+push constant 48
+push argument 1
+push local 0
+call Math.multiply 2
+add
+push constant 490
+push constant 48
+push argument 1
+push local 0
+call Math.multiply 2
+add
+call Screen.drawLine 4
+pop temp 0
+push constant 340
+push constant 83
+push argument 1
+push local 0
+call Math.multiply 2
+add
+push constant 490
+push constant 83
+push argument 1
+push local 0
+call Math.multiply 2
+add
+call Screen.drawLine 4
+pop temp 0
+push constant 330
+push constant 48
+push argument 1
+push local 0
+call Math.multiply 2
+add
+push constant 330
+push constant 93
+push argument 1
+push local 0
+call Math.multiply 2
+add
+call Screen.drawLine 4
+pop temp 0
+push constant 490
+push constant 48
+push argument 1
+push local 0
+call Math.multiply 2
+add
+push constant 490
+push constant 83
+push argument 1
+push local 0
+call Math.multiply 2
+add
+call Screen.drawLine 4
+pop temp 0
+push constant 340
+push constant 83
+push argument 1
+push local 0
+call Math.multiply 2
+add
+push constant 330
+push constant 93
+push argument 1
+push local 0
+call Math.multiply 2
+add
+call Screen.drawLine 4
+pop temp 0
+push constant 0
+return

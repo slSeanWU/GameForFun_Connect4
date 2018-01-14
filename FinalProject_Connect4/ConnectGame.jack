@@ -36,7 +36,7 @@ class ConnectGame{
 			do Output.printString("O: Drop");
 			do Output.moveCursor(21, 4);
 			do Output.printString("P: Pop-Out");
-		}			
+		}
 		do Output.moveCursor(22, 58);
 		do Output.printString("(Q)uit"); 
 		
@@ -44,8 +44,14 @@ class ConnectGame{
 		do drawTurn(current_p);
 		do tmp.drawDisc(current_col, 6);
 
-
+		if( gameOption = 3 ){
+			do Output.moveCursor(4, 2);
+			do Output.printString("**AI**:Black");
+			do Output.moveCursor(6, 2);
+			do Output.printString("Player:White");
+		}
 		
+
 		while (( (steps < 42) & ( ~(Keyboard.keyPressed() = 81) ) ) & (~end)){ // not tied & (Q) not pressed
 
 			// placing disc
@@ -101,11 +107,6 @@ class ConnectGame{
 					let tmp = Disc.new(current_p);
 					do tmp.drawDisc(current_col, 6);
 					do drawTurn(current_p);
-					/*
-					if (newAI.checkCrash()){
-						do newAI.crashMessage();
-					}
-					*/
 				}
 			}
 			
@@ -200,6 +201,8 @@ class ConnectGame{
 					do Sys.wait(100);
 				}
 			}
+
+			do newAI.seedIncrease();
 		}
 			
 		return;	

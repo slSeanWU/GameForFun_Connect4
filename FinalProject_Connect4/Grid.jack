@@ -233,4 +233,17 @@ class Grid{
 		let test = i;
 		return;
 	}
+
+
+	method void DrawDialogue(int index){
+		var int interval;
+		let interval = 55;
+		do Screen.setColor(true);
+		do Screen.drawLine(330, 48 + (index*interval), 490, 48 + (index*interval));
+		do Screen.drawLine(340, 83 + (index*interval), 490, 83 + (index*interval));
+		do Screen.drawLine(330, 48 + (index*interval), 330, 93 + (index*interval));
+		do Screen.drawLine(490, 48 + (index*interval), 490, 83 + (index*interval));
+		do Screen.drawLine(340, 83 + (index*interval), 330, 93 + (index*interval));
+		return;
+	}
 }
