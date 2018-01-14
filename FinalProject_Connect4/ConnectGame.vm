@@ -697,9 +697,16 @@ call Sys.wait 1
 pop temp 0
 label IF_FALSE21
 label IF_FALSE19
+push argument 1
+push constant 3
+eq
+if-goto IF_TRUE22
+goto IF_FALSE22
+label IF_TRUE22
 push this 8
 call AI.seedIncrease 1
 pop temp 0
+label IF_FALSE22
 goto WHILE_EXP0
 label WHILE_END0
 push constant 0

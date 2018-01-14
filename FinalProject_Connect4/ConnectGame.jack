@@ -202,7 +202,9 @@ class ConnectGame{
 				}
 			}
 
-			do newAI.seedIncrease();
+			if (gameOption = 3){
+				do newAI.seedIncrease();
+			}
 		}
 			
 		return;	
