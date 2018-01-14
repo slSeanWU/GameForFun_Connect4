@@ -1,0 +1,536 @@
+class AI{
+	field int color;
+	field Array priority;
+	field Grid grid;
+	field boolean AIcrashed;
+	field int randseed;
+
+	constructor AI new(int c, Grid getGrid){
+		let randseed = 0;
+		let AIcrashed = 0;
+		let grid = getGrid;
+		let priority = Array.new(7);
+		let priority[0] = 3;
+		let priority[1] = 2;
+		let priority[2] = 4;
+		let priority[3] = 5;
+		let priority[4] = 1;
+		let priority[5] = 0;
+		let priority[6] = 6;
+		let color = c;
+		return this;
+	}
+
+
+
+
+
+
+	method int decided(Grid getGrid){
+
+		var int i, j;
+		var int toBlock;
+		let grid = getGrid;
+
+
+		if (grid.getSteps() = 0){
+			return 3;
+		}
+/*
+		let i = Brute_force();
+		if (i < 7){
+			return i;
+		}else{
+			return rand(randseed);
+		}
+*/
+
+
+		let i = Win(color);   //if I will win at the next step, just do it!
+		if (i < 7){
+			return i;
+		}else{
+			let i = BlockHorTwo();  //if there is _OO_ ("_" means blank), stop it
+			if (i < 7){
+				return i;
+			}
+			let toBlock = blockOppo();  //if opponent will win next step, block it!
+			if (toBlock < 7){
+				return toBlock;
+			}else{
+				if (grid.getSteps() = 2){
+					return rand(randseed);
+				}else{
+					let i = wannaWin();   //search existing line and trying to increase its length
+					if (i < 7){
+						return i;
+					}
+				}
+
+
+				// last choice : according to the arbitrary priority
+				let i = 0;
+				while(~grid.legal(priority[i])){
+					let i = i + 1;
+				}
+				return priority[i];
+
+
+				//else (theoretically impossible to happen)
+				//do crashMessage();
+				//return rand(randseed);
+			}
+		}
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+	method int blockOppo(){
+		var int p;
+		if (color = 1){
+			let p = 2;
+		}else{
+			let p = 1;
+		}
+		
+		return Win(p);
+	}
+
+	method int BlockHorTwo(){
+		var int col, row, p;
+		if (color = 1){
+			let p = 2;
+		}else{
+			let p = 1;
+		}
+
+		let col = 0;
+		while(col < 7){
+
+			let row = 0;
+			while( row < 6 ){
+				if( grid.getRec(col, row) = p ){
+					if (col < 6){
+						if (judgeHor(col, row, p)){
+							if (((col > 0) & ((grid.getRec(col-1, row) = 0))) & (grid.getStack(col-1) = row)){
+								return (col-1);
+							}
+							if ((((col+2) < 7) & ((grid.getRec(col+2, row) = 0))) & (grid.getStack(col+2) = row)){
+								return (col+2);
+							}
+						}
+					}
+				}
+				let row = row + 1;		
+			}
+
+			let col = col + 1;
+		}
+		return 7;
+	}
+
+
+
+
+
+
+
+
+
+
+
+	method boolean judgeHor(int col, int row, int p){
+		if( ( grid.getRec(col, row) = p ) & ( grid.getRec(col + 1, row) = p )){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	method boolean judgeVert(int col, int row, int p){
+		if( ( grid.getRec(col, row) = p ) & ( grid.getRec(col, row + 1) = p ) ){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	method boolean judgeDiaLeft(int col, int row, int p){
+		if( ( grid.getRec(col, row) = p ) & ( grid.getRec(col - 1, row + 1) = p ) ){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+	method boolean judgeDiaRight(int col, int row, int p){
+		if( ( grid.getRec(col, row) = p ) & ( grid.getRec(col + 1, row + 1) = p ) ){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+	
+
+	method int PossibleToWin(int p){ //if color p gonna win return its endpoint; otherwise, return 7.
+		var int col, row;
+		let col = 0;
+		while( col < 7 ){
+			
+			let row = 0;
+			while( row < 6 ){
+				
+				if( grid.getRec(col, row) = p ){
+					
+					if (col < 6){
+						if (judgeHor(col, row, p)){
+							if (((col > 0) & ((grid.getRec(col-1, row) = 0))) & (grid.getStack(col-1) = row)){
+								return (col-1);
+							}
+							if ((((col+2) < 7) & ((grid.getRec(col+2, row) = 0))) & (grid.getStack(col+2) = row)){
+								return (col+2);
+							}
+						}
+					}
+
+					if (row < 4){
+						if (judgeVert(col, row, p)){
+							if (((row+1) < 4) & ((grid.getRec(col, row+2) = 0))){
+								return col;
+							}
+						}
+					}
+
+					if ((col < 5) & (row < 4)){
+						if (judgeDiaRight(col, row, p)){
+							if ((((col+1) < 5) & ((row+1) < 4))
+								& ((grid.getRec(col+2, row+2) = 0))){
+								return (col+2);
+							}
+						}
+					}
+
+					if ((col > 1) & (row > 1)){
+						if (judgeDiaLeft(col, row, p)){
+							if ((((col-1) > 1) & ((row+1) < 4))
+								& ((grid.getRec(col-2, row+2) = 0))){
+								return (col-2);
+							}
+						}
+					}
+				}
+
+				let row = row + 1;
+			}
+			
+			let col = col + 1;
+		}
+
+		return 7;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+	method int Win(int p){   //check if the color will win at the next step
+		var int col;
+		let col = 0;
+		while((col < 7)){
+			do grid.setTest(1);
+			do grid.setRec( col, grid.getStack(col), p );
+			do grid.setStack( col, grid.getStack(col) + 1 );
+			if (checkWin(p)){
+				do grid.setTest(0);
+				do grid.setStack( col, grid.getStack(col) - 1 );
+				do grid.setRec( col, grid.getStack(col), 0 );
+				return col;
+			}
+			do grid.setTest(0);
+			do grid.setStack( col, grid.getStack(col) - 1 );
+			do grid.setRec( col, grid.getStack(col), 0 );
+						
+			let col = col + 1;
+		}
+			
+		return 7;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	method int wannaWin(){
+		var int col;
+		let col = PossibleToWin(color);
+		if ((col < 7)){
+			if(ThinkTwice(col)){              //after this step, will the opponent win?
+				return col;
+			}
+		}
+		return 7;
+	}
+
+	method boolean ThinkTwice(int col){
+		var int i, p;
+		if (color = 1){
+			let p = 2;
+		}else{
+			let p = 1;
+		}
+		do grid.setTest(1);
+		do grid.setRec( col, grid.getStack(col), color );
+		do grid.setStack( col, grid.getStack(col) + 1 );
+
+		let i = Win(p);
+		if (i < 7){
+			do grid.setTest(0);
+			do grid.setStack( col, grid.getStack(col) - 1 );
+			do grid.setRec( col, grid.getStack(col), 0 );
+			return true;
+		}
+		do grid.setTest(0);
+		do grid.setStack( col, grid.getStack(col) - 1 );
+		do grid.setRec( col, grid.getStack(col), 0 );
+		
+		return false;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+	method boolean checkCrash(){
+		return AIcrashed;
+	}
+
+
+	method void crashMessage(){
+		let AIcrashed = 1;
+		do Output.moveCursor(6, 9);
+		do Output.printString("Oops! It seems that the AI was Fxxked up");
+		return;
+	}
+
+	method int rand(int randseed){
+		var int i;
+		let i = randseed - (randseed / 7);
+		while(grid.getStack(priority[i]) > 5){
+			let i = i + 1;
+			if (i > 6){
+				let i = i - 7;
+			}
+		}
+		return priority[i];
+	}
+
+	method void seedIncrease(){
+		let randseed = randseed + 1;
+		if (randseed > 6){
+			let randseed = randseed - 7;
+		}
+		return;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	method boolean checkWin(int p){
+		var int col, row;
+		do grid.setTest(1);
+		let col = 0;
+		while( col < 7 ){
+			
+			let row = 0;
+			while( row < 6 ){
+				
+				if( grid.getRec(col, row) = p ){
+					
+					if( (col < 3) & (row < 3) ){
+						if( (grid.judgeHor(col, row, p)) | (grid.judgeVert(col, row, p)) | (grid.judgeDiaRight(col, row, p)) ){
+							do grid.setTest(0);
+							return true;
+						}
+					}
+					if( (col = 3) & (row < 3) ){
+						if( (grid.judgeHor(col, row, p)) | (grid.judgeVert(col, row, p)) | 
+							(grid.judgeDiaRight(col, row, p)) | (grid.judgeDiaLeft(col, row, p)) ){
+							do grid.setTest(0);
+							return true;
+						}
+					}
+					if( (col > 3) & (row < 3) ){
+						if( (grid.judgeVert(col, row, p)) | (grid.judgeDiaLeft(col, row, p)) ){
+							do grid.setTest(0);
+							return true;
+						}
+					}
+					if( (col < 4) & (row > 2) ){
+						if( grid.judgeHor(col, row, p) ){
+							do grid.setTest(0);
+							return true;
+						}
+					}
+				}
+				let row = row + 1;
+			}
+			
+			let col = col + 1;
+		}
+		
+		do grid.setTest(0);
+		return false;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
+	method int Brute_force(){
+		var int i, j, k, l, p, temp_ans;
+		if (color = 1){
+			let p = 2;
+		}else{
+			let p = 1;
+		}
+
+		let temp_ans = 7;
+		let i = 0;
+		while(i < 7){
+
+			let j = 0;
+			while(j < 7){
+
+				let k = 0;
+				while(k < 7){
+
+					let l = 0;
+					while(l < 7){
+
+
+						do grid.setTest(1);
+						do grid.setRec( i, grid.getStack(i), color );
+						do grid.setStack( i, grid.getStack(i) + 1 );
+						if (checkWin(color)){
+							do grid.setStack( i, grid.getStack(i) - 1 );
+							do grid.setRec( i, grid.getStack(i), 0 );
+							do grid.setTest(0);
+							return i;
+						}
+						do grid.setRec( j, grid.getStack(j), p );
+						do grid.setStack( j, grid.getStack(j) + 1 );
+						if (~checkWin(p)){
+							do grid.setRec( k, grid.getStack(k), color );
+							do grid.setStack( k, grid.getStack(k) + 1 );
+							if (checkWin(color)){
+								do grid.setStack( i, grid.getStack(i) - 1 );
+								do grid.setRec( i, grid.getStack(i), 0 );
+								do grid.setStack( j, grid.getStack(j) - 1 );
+								do grid.setRec( j, grid.getStack(j), 0 );
+								do grid.setStack( k, grid.getStack(k) - 1 );
+								do grid.setRec( k, grid.getStack(k), 0 );
+								do grid.setTest(0);
+								return i;
+							}
+							do grid.setRec( l, grid.getStack(l), p );
+							do grid.setStack( l, grid.getStack(l) + 1 );
+							if (~checkWin(p)){
+								let temp_ans = i;
+							}
+							do grid.setStack( i, grid.getStack(i) - 1 );
+							do grid.setRec( i, grid.getStack(i), 0 );
+							do grid.setStack( j, grid.getStack(j) - 1 );
+							do grid.setRec( j, grid.getStack(j), 0 );
+							do grid.setStack( k, grid.getStack(k) - 1 );
+							do grid.setRec( k, grid.getStack(k), 0 );
+							do grid.setStack( l, grid.getStack(l) - 1 );
+							do grid.setRec( l, grid.getStack(l), 0 );
+							do grid.setTest(0);
+						}else{
+							do grid.setStack( i, grid.getStack(i) - 1 );
+							do grid.setRec( i, grid.getStack(i), 0 );
+							do grid.setStack( j, grid.getStack(j) - 1 );
+							do grid.setRec( j, grid.getStack(j), 0 );
+							do grid.setTest(0);
+						}
+
+						do grid.setTest(0);
+						let l = l + 1;
+					}
+					let k = k + 1;
+				}
+				let j = j + 1;
+			}
+			let i = i + 1;
+		}
+
+		return temp_ans;
+	}
+}
+
+
+*/

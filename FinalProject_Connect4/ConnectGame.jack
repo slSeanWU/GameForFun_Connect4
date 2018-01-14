@@ -1,9 +1,10 @@
 class ConnectGame{
 	field Grid grid;
 	field Disc tmp;
-	field int current_p, current_col, steps;
+	field int current_p, current_col, steps, ai, player;
 	field int currentMode;
-	
+	field AI newAI;
+
 	constructor ConnectGame new(){
 		let grid = Grid.new();
 		let current_p = 1;
@@ -13,14 +14,21 @@ class ConnectGame{
 		let tmp = Disc.new(1);
 		
 		return this;
-	}	
+	}
 	
 	method void play(int gameOption){
 		var boolean end;
+		let ai = 0;
+		let player = 0;
+		let steps = 0;
 		let end = 0;
-		
 		do Screen.clearScreen();
-		
+		if (gameOption = 3){
+			let ai = 1;
+			let player = 2;
+			let newAI = AI.new(ai, grid);
+		}
+
 		if( gameOption = 1 ){
 			do Output.moveCursor(19, 2);
 			do Output.printString("Press");
@@ -35,10 +43,23 @@ class ConnectGame{
 		do grid.drawGrid();
 		do drawTurn(current_p);
 		do tmp.drawDisc(current_col, 6);
+
+
 		
-		while( (steps < 42) & ( ~(Keyboard.keyPressed() = 81) ) ){ // not tied & (Q) not pressed
+		while (( (steps < 42) & ( ~(Keyboard.keyPressed() = 81) ) ) & (~end)){ // not tied & (Q) not pressed
+
 			// placing disc
-			if( ( currentMode = 0 ) & ( Keyboard.keyPressed() = 133 ) & ( grid.getStack(current_col) < 6 ) ){
+			if( (( currentMode = 0 ) & ( Keyboard.keyPressed() = 133 ) & ( grid.getStack(current_col) < 6 ) ) 
+					| (current_p = ai) ){
+
+
+				if (current_p = ai){
+					do tmp.eraseDisc(current_col, 6);
+					let current_col = newAI.decided(grid);
+					do tmp.drawDisc(current_col, 6);
+					do Sys.wait(300);
+				}
+
 				do tmp.eraseDisc(current_col, 6);
 				do tmp.drawDisc( current_col, grid.getStack(current_col) );
 				do grid.setRec( current_col, grid.getStack(current_col), current_p );
@@ -46,6 +67,7 @@ class ConnectGame{
 				do tmp.clear();
 				
 				let steps = steps + 1;
+				do grid.setSteps(steps);
 				let current_col = 3;
 				
 				// win
@@ -79,6 +101,11 @@ class ConnectGame{
 					let tmp = Disc.new(current_p);
 					do tmp.drawDisc(current_col, 6);
 					do drawTurn(current_p);
+					/*
+					if (newAI.checkCrash()){
+						do newAI.crashMessage();
+					}
+					*/
 				}
 			}
 			
@@ -172,12 +199,14 @@ class ConnectGame{
 					
 					do Sys.wait(100);
 				}
-			}		
+			}
 		}
 			
 		return;	
 	}
 	
+
+
 	method void drawTurn(int p){
 		do Screen.setColor(true);
 		do Screen.drawRectangle(12, 108, 116, 188);
@@ -204,7 +233,7 @@ class ConnectGame{
 			do Output.moveCursor(15, 6);
 			do Output.printString("turn");
 		}
-		
+
 		return;
 	}
 	

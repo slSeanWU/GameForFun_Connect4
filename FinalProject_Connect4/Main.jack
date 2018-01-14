@@ -5,20 +5,72 @@ class Main
 	{
         var ConnectGame game;
 		var int menuOption;
+		var int players;
+		var int played;
 		
 		let menuOption = 0;
 		do Main.drawHomepage();
 		
 		// menu operations
-		while ( ~( (Keyboard.keyPressed() = 128)  & (menuOption = 2) ) ) // exit the game
+		while ( ~( (Keyboard.keyPressed() = 128) & (menuOption = 2) ) ) // exit the game
 		{
+			let played = 0;
 			if ((Keyboard.keyPressed() = 128) & ( (menuOption = 0) | (menuOption = 1) ))
 			{
 				let game = ConnectGame.new();
-				do game.play(menuOption);
-				do game.clear();
-				do Sys.wait(300);
+				do Screen.clearScreen();
+				do Output.moveCursor(22, 58);
+				do Output.printString("(Q)uit"); 
 				
+				if (menuOption = 0){
+					//choose mode
+					do Output.moveCursor(8, 24);
+					do Output.printString("Choose mode");
+					do Output.moveCursor(11, 11);
+					do Output.printString("1P : I'm an edge man with no friend QQ");
+					do Output.moveCursor(13, 11);
+					do Output.printString("2P : Wanna play with other kimo ota like me");
+					do Output.moveCursor(15, 11);
+					do Output.printString("3P : No such thing");
+					let players = 2;
+					do Main.mode_indicator(1);
+					do Sys.wait(300);
+
+					while ((~(Keyboard.keyPressed() = 81)) & (~played)){
+						if (Keyboard.keyPressed() = 128){
+							if (players = 2){
+								let menuOption = 0;
+							}
+							if (players = 1){
+								let menuOption = 3; //AI mode
+							}
+							do game.play(menuOption);
+							let played = 1;
+							do game.clear();
+							do Sys.wait(150);
+						}
+
+						if (Keyboard.keyPressed() = 131){
+							let players = 1;
+							do Main.mode_indicator(0);
+							do Sys.wait(50);
+						}
+
+						if (Keyboard.keyPressed() = 133){
+							let players = 2;
+							do Main.mode_indicator(1);
+							do Sys.wait(50);
+						}
+						do Sys.wait(50);
+					}
+				}
+
+				if (menuOption = 1){
+					do game.play(menuOption);
+					do game.clear();
+					do Sys.wait(300);
+				}
+
 				let menuOption = 0;
 				do Screen.clearScreen();
 				do Main.drawHomepage();
@@ -44,6 +96,8 @@ class Main
 		return;
 	}
 	
+
+
 	function void drawHomepage()
 	{
 		// draw the game's logo.
@@ -91,6 +145,8 @@ class Main
 		return;
 	}
 	
+
+
 	// tell user the current menu selection
 	function void indicator(int op)
 	{	
@@ -124,4 +180,20 @@ class Main
 
 		return;
 	}	
+
+	function void mode_indicator(int op){
+		if (op = 0){
+			do Output.moveCursor(11, 9);
+			do Output.printString(">>");
+			do Output.moveCursor(13, 9);
+			do Output.printString("  ");
+		}
+		if (op = 1){
+			do Output.moveCursor(11, 9);
+			do Output.printString("  ");
+			do Output.moveCursor(13, 9);
+			do Output.printString(">>");
+		}
+		return;
+	}
 }
