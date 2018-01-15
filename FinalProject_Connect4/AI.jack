@@ -219,19 +219,20 @@ class AI{
 		var int col;
 		let col = 0;
 		while((col < 7)){
-			do grid.setTest(1);
-			do grid.setRec( col, grid.getStack(col), c );
-			do grid.setStack( col, grid.getStack(col) + 1 );
-			if (checkWin(c)){
+			if (grid.legal(col)){
+				do grid.setTest(1);
+				do grid.setRec( col, grid.getStack(col), c );
+				do grid.setStack( col, grid.getStack(col) + 1 );
+				if (checkWin(c)){
+					do grid.setTest(0);
+					do grid.setStack( col, grid.getStack(col) - 1 );
+					do grid.setRec( col, grid.getStack(col), 0 );
+					return col;
+				}
 				do grid.setTest(0);
 				do grid.setStack( col, grid.getStack(col) - 1 );
 				do grid.setRec( col, grid.getStack(col), 0 );
-				return col;
 			}
-			do grid.setTest(0);
-			do grid.setStack( col, grid.getStack(col) - 1 );
-			do grid.setRec( col, grid.getStack(col), 0 );
-						
 			let col = col + 1;
 		}
 			
@@ -254,6 +255,10 @@ class AI{
 
 	method boolean ThinkTwice(int col){
 		var int i;
+
+		if (~grid.legal(col)){
+			return false;
+		}
 
 		do grid.setTest(1);
 		do grid.setRec( col, grid.getStack(col), color );
@@ -371,7 +376,7 @@ class AI{
 
 			if (i = 0){
 				do Output.moveCursor(5 + (speakCnt*5), 43);
-				do Output.printString("Too Young");
+				do Output.printString("Too Young   ");
 				do Output.moveCursor(6 + (speakCnt*5), 43);
 				do Output.printString("    Too Simple~   ");
 			}
@@ -449,7 +454,7 @@ class AI{
 
 	method int rand(int randseed){
 		var int i;
-		let i = randseed - (randseed / 7);
+		let i = randseed - ((randseed / 7) * 7);
 		while(grid.getStack(priority[i]) > 5){
 			let i = i + 1;
 			if (i > 6){

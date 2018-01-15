@@ -215,9 +215,9 @@ class Grid{
 
 	method boolean legal(int col){
 		if(stack[col] > 5){
-			return 0;
+			return false;
 		}
-		return 1;
+		return true;
 	}
 
 	method void setSteps(int Steps){

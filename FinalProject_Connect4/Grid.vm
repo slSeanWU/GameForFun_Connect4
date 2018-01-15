@@ -816,7 +816,8 @@ label IF_TRUE0
 push constant 0
 return
 label IF_FALSE0
-push constant 1
+push constant 0
+not
 return
 function Grid.setSteps 0
 push argument 0
