@@ -372,7 +372,7 @@ class AI{
 				do Output.moveCursor(5 + (speakCnt*5), 43);
 				do Output.printString("Too Young");
 				do Output.moveCursor(6 + (speakCnt*5), 43);
-				do Output.printString("    Too Simple~");
+				do Output.printString("    Too Simple~   ");
 			}
 
 			if (i = 1){
