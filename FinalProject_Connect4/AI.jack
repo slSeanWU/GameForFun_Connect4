@@ -331,27 +331,28 @@ class AI{
 		let max = 0;
 		let index = 0;
 		while(index < 7){
-			let cnt = 0;
-			let i = -1;
-			while(i < 2){
-				if ( ((priority[index]+i) > -1) & ((priority[index]+i) < 7) ){
-					let j = -1;
-					while(j < 2){
-						if ( ((grid.getStack(priority[index])+j) > -1) & ((grid.getStack(priority[index])+j) < 6) ){
-							if(grid.getRec(priority[index]+i, grid.getStack(priority[index])+j) = color){
-								let cnt = cnt + 1;
+			if ( ThinkTwice(priority[index]) ){
+				let cnt = 0;
+				let i = -1;
+				while(i < 2){
+					if ( ((priority[index]+i) > -1) & ((priority[index]+i) < 7) ){
+						let j = -1;
+						while(j < 2){
+							if ( ((grid.getStack(priority[index])+j) > -1) & ((grid.getStack(priority[index])+j) < 6) ){
+								if(grid.getRec(priority[index]+i, grid.getStack(priority[index])+j) = color){
+									let cnt = cnt + 1;
+								}
 							}
+							let j = j + 1;
 						}
-						let j = j + 1;
 					}
+					let i = i + 1;
 				}
-				let i = i + 1;
+				if (cnt > max){
+					let max = cnt;
+					let max_col = priority[index];
+				}
 			}
-			if (cnt > max){
-				let max = cnt;
-				let max_col = priority[index];
-			}
-
 			let index = index + 1;
 		}
 
