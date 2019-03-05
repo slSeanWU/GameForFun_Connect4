@@ -1,3 +1,3 @@
-# Intro-CS-Final-Project
+# GameForFun_Connect4
 
-## Topic: Jack Language App -- Connect 4
+## From Nand to Tetris: Jack Language Application
